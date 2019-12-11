@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:server": "webpack --config webpack.server.js --watch",
-    "dev:start": "nodemon --watch build --exec node \"./build/bundle.js\""
+    "dev:client:build": "webpack --config webpack.client.js --watch",
+    "dev:server:build": "webpack --config webpack.server.js --watch",
+    "dev:server:start": "nodemon --watch build --exec node \"./build/bundle.js\""
   },
   "keywords": [],
   "author": "",
