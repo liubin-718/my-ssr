@@ -5,11 +5,11 @@ import express from 'express'
 import App from '../src/App'
 
 const app = express()
-
-app.get('/', (res,rep) => {
-    const Page = <App></App>
+app.use(express.static("public"))
+app.get('/', (req,res) => {
+    
     // 把react组件解析成html
-    const content = renderToString(Page)
+    const content = renderToString(App)
     // 字符串模板
     res.send(`
     <html>
@@ -19,7 +19,12 @@ app.get('/', (res,rep) => {
     </head>
     <body>
         <div id="root">${content}</div>
+        <script src="/bundle.js"></script>
     </body>
     </html>
     `)
+})
+
+app.listen(9093, () => {
+    console.log("Listen done")
 })
