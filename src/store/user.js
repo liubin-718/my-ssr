@@ -11,7 +11,7 @@ const changeUserInfo = data => ({
 
 export const getUserInfo = server => {
   return (dispatch, getState, axiosInstance) => {
-    return axios.get('http://localhost:9090/api/user/info1').then(resp => {
+    return axios.get('http://localhost:9090/api/user/info').then(resp => {
       const { data } = resp.data
       console.log('userInfo：', data)
       dispatch(changeUserInfo(data))
