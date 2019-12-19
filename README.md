@@ -51,7 +51,24 @@ day3-作业
 降级处理接口报错
 方法一: Promise.all 不处理异常, 在 finally 回调返回. 无论是否发生错误均返回, 可以实现降级处理. 缺点: 任何一个 reject 会导致立即返回, 会导致其他还未 resolve 的正常请求被截断, 从而改成走 client 端渲染
 方法二: 实现 ES2010 的 Promise.allSettled 方法, 所有请求结束后才返回, 将每个 promise 的结果储存在 results 中
+Promise.allSettled 需要扩展支持
 没有 Promise.all 的缺点
 前后端统一 axios
 client 端 store 中获取数据的端口改成 server 端 9000
 server 端单独处理 /api 开头的请求, 将请求转发到 mock server 9090 端口, 从而解决跨域问题
+
+
+http-proxy-middleware  对http请求做一个代理转发  https://github.com/chimurai/http-proxy-middleware
+针对express代理的工具                           https://github.com/villadora/express-http-proxy
+
+支持css:
+npm install css-loader style-loader -D
+node层没有document所以要isomorphic-style-loader
+做同构用的 isomorphic-style-loader     npm install isomorphic-style-loader --save-dev
+https://github.com/kriasoft/isomorphic-style-loader
+
+错误页面状态码的支持：
+
+
+下节课讨论 12.19
+ssr额外的性能损耗，日常没问题，大流浪期间如何尽可能的规避，让服务稳定

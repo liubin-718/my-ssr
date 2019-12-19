@@ -2,16 +2,17 @@
 import axios from 'axios'
 // actionType
 const GET_LIST = 'INDEX/USER_INFO'
+const GET_INFO = 'USER/USER_INFO'
 
 // actionCreator
 const changeUserInfo = data => ({
-  type: GET_LIST,
-  data
+  type: GET_INFO,
+  userinfo
 })
 
 export const getUserInfo = server => {
   return (dispatch, getState, axiosInstance) => {
-    return axios.get('http://localhost:9090/api/user/info').then(resp => {
+    return axios.get('/api/user/info').then(resp => {
       const { data } = resp.data
       console.log('userInfo：', data)
       dispatch(changeUserInfo(data))
@@ -28,12 +29,13 @@ export default (state = defaultState, action) => {
     case GET_LIST:
       // const newState = {
       //   ...state,
-      //   list: action.list
+      //   list: action.userinfo
       // }
       // return newState
+      case GET_INFO:
       return {
         ...state,
-        userInfo: action.data
+        userInfo: action.userinfo
       }
     default:
       return state

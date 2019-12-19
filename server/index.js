@@ -2,11 +2,12 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import express from 'express'
-import { StaticRouter, matchPath, Route } from 'react-router-dom'
+import { StaticRouter, matchPath, Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { getServerStore } from '../src/store/store'
 import routes from '../src/App'
 import Header from '../src/component/Header'
+import proxy from 'http-proxy-middleware'
 
 
 const store = getServerStore()
@@ -14,31 +15,66 @@ const store = getServerStore()
 const app = express()
 app.use(express.static('public'))
 
+app.use(
+  '/api',
+  proxy({ target: 'http://localhost:9090', changeOrigin: true })
+);
+
 app.get('*', (req, resp) => {
   // 获取根据路由渲染出的组件，并拿到loadData方法，获取数据
   // 存储网络请求
+
+  // if(req.url.startsWith('/api')){
+  //   //不渲染页面，使用axios转发axios.get
+  // }
   const promises = []
   routes.some(route => {
     const match = matchPath(req.path, route)
+    // if (match) {
+    //   const {loadData} = route.component
+    //   if (loadData) {
+    //     promises.push(loadData(store))
+    //   }
+    // }
+    //报错的话降级处理  ---比如：把store中index的list接口改为list1
     if (match) {
       const {loadData} = route.component
       if (loadData) {
-        promises.push(loadData(store))
+        // 包装后 规避报错，可以考虑加日志
+        const promise = new Promise((resolve,reject) => {
+          loadData(store).then(resolve).catch(resolve)
+        })
+        promises.push(promise)
       }
     }
+
   })
   // 等待所有网络请求结束后在渲染
-  Promise.all(promises.map(p => p.catch(e => null))).then(() => {
+  // Promise.all(promises.map(p => p.catch(e => null))).then(() => {
+  Promise.all(promises).then(() => {
+    const context = {}
     // const page = <App title="开课吧"></App>
     // 把react组件，解析成html
     const content = renderToString(
       <Provider store={store}>
-        <StaticRouter location={req.url}>
+        <StaticRouter location={req.url} context={context}>
           <Header/>
-          {routes.map(route => <Route {...route}/>)}
+          <Switch>
+
+            {routes.map(route => <Route {...route}/>)}
+          </Switch>
         </StaticRouter>
       </Provider>
     )
+    console.log('context', context);
+    
+    if(context.statuscode){
+      // 状态切换和页面的跳转
+      resp.status(context.statuscode)
+    }
+    if(context.action=="REPLACE"){
+      resp.redirect(301,context.url) //context.url是我们要跳转的目标
+    }
     // 字符串模板
     resp.send(`
     <html>

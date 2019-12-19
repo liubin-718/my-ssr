@@ -1,6 +1,7 @@
 // 首页的逻辑
-import axios from 'axios'
+// import axios from 'axios'
 // actionType
+// import request from ''
 const GET_LIST = 'INDEX/GET_LIST'
 
 // actionCreator
@@ -10,8 +11,8 @@ const changeList = list => ({
 })
 
 export const getIndexList = server => {
-  return (dispatch, getState, axiosInstance) => {
-    return axios.get('http://localhost:9090/api/course/list').then(resp => {
+  return (dispatch, getState, $axios) => {
+    return $axios.get('api/course/list').then(resp => {
       const { list } = resp.data
       console.log('list', list)
       dispatch(changeList(list))

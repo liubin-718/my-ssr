@@ -5,9 +5,9 @@ const app = express()
 
 app.get('/api/course/list', (req, resp) => {
   // 支持跨域调用
-  resp.header('Access-Control-Allow-Origin', '*')
-  resp.header('Access-Control-Allow-Method', 'GET,POST,PUT,DELETE')
-  resp.header('Content-Type', 'application/json;charset=utf-8')
+  // resp.header('Access-Control-Allow-Origin', '*')
+  // resp.header('Access-Control-Allow-Method', 'GET,POST,PUT,DELETE')
+  // resp.header('Content-Type', 'application/json;charset=utf-8')
   resp.json({
     code: 0,
     list: [
@@ -20,9 +20,9 @@ app.get('/api/course/list', (req, resp) => {
 })
 app.get('/api/user/info', (req, resp) => {
   // 支持跨域调用
-  resp.header('Access-Control-Allow-Origin', '*')
-  resp.header('Access-Control-Allow-Method', 'GET,POST,PUT,DELETE')
-  resp.header('Content-Type', 'application/json;charset=utf-8')
+  // resp.header('Access-Control-Allow-Origin', '*')
+  // resp.header('Access-Control-Allow-Method', 'GET,POST,PUT,DELETE')
+  // resp.header('Content-Type', 'application/json;charset=utf-8')
   resp.json({
     code: 0,
     data: {

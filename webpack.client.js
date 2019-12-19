@@ -26,6 +26,10 @@ module.exports = {
             ['@babel/preset-env'] // 支持最新的js语法
           ]
         }
+      },
+      {
+        test:/\.css$/,
+        use:['style-loader','css-loader']
       }
     ]
   }
