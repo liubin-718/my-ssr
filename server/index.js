@@ -1,4 +1,6 @@
 // 这里的node代码，会用babel处理
+import path from 'path'
+import fs from 'fs'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import express from 'express'
@@ -19,10 +21,24 @@ app.use(
   '/api',
   proxy({ target: 'http://localhost:9090', changeOrigin: true })
 );
-
+function csrRender(res){
+  // 读取csr文件，返回
+  const filename = path.resolve(process.cwd(), 'public/index.csr.html')
+  const html = fs.readFileSync(filename, 'utf-8')
+  return res.send(html)
+}
 app.get('*', (req, resp) => {
   // 获取根据路由渲染出的组件，并拿到loadData方法，获取数据
   // 存储网络请求
+  if(req.query._mode == "csr"){ // 9093/?_mode=csr
+    console.log('url参数开启csr降级')
+    return csrRender(resp)
+  }
+  // 配置开关开启csr
+
+  // 服务器负载过高 开启csr
+
+
 
   // if(req.url.startsWith('/api')){
   //   //不渲染页面，使用axios转发axios.get
@@ -52,7 +68,9 @@ app.get('*', (req, resp) => {
   // 等待所有网络请求结束后在渲染
   // Promise.all(promises.map(p => p.catch(e => null))).then(() => {
   Promise.all(promises).then(() => {
-    const context = {}
+    const context = {
+      css: []
+    }
     // const page = <App title="开课吧"></App>
     // 把react组件，解析成html
     const content = renderToString(
@@ -60,7 +78,6 @@ app.get('*', (req, resp) => {
         <StaticRouter location={req.url} context={context}>
           <Header/>
           <Switch>
-
             {routes.map(route => <Route {...route}/>)}
           </Switch>
         </StaticRouter>
@@ -68,19 +85,24 @@ app.get('*', (req, resp) => {
     )
     console.log('context', context);
     
-    if(context.statuscode){
+    if(context.statusCode){
       // 状态切换和页面的跳转
-      resp.status(context.statuscode)
+      resp.status(context.statusCode)
     }
     if(context.action=="REPLACE"){
       resp.redirect(301,context.url) //context.url是我们要跳转的目标
     }
+
+    const css = context.css.join('\n')
     // 字符串模板
     resp.send(`
     <html>
       <head>
          <meta charset="utf-8" />
          <title>react ssr</title>
+         <style>
+          ${css}
+         </style>
       </head>
       <body>
          <div id="root">${content}</div>

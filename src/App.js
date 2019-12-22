@@ -4,7 +4,7 @@ import Index from './container/Index'
 import About from './container/About'
 import User from './container/Home'
 import NotFound from './container/NotFound'
-import './App.css'
+// import './App.css'
 
 // export default (
 //   <div>
@@ -35,6 +35,7 @@ export default [
     key: 'user'
   },
   {
-    component:NotFound
+    component:NotFound,
+    key: 'notfound'
   }
 ]

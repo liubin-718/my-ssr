@@ -3,14 +3,14 @@ import {Route} from 'react-router-dom'
 function Status({code, children}){
     return <Route render={({staticContext}) => {
         if(staticContext){
-            staticContext.statuscode=code //404
+            staticContext.statusCode=code //404
         }
         return children
     }}></Route>
 }
 function NotFound(props){
     console.log('notFound', props);
-    // 渲染了这个组件就给staticContext赋值 statuscode=404
+    // 渲染了这个组件就给staticContext赋值 statusCode=404
     
     return (
         <Status code={404}>
