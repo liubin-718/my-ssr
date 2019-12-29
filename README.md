@@ -72,3 +72,29 @@ https://github.com/kriasoft/isomorphic-style-loader
 
 下节课讨论 12.19
 ssr额外的性能损耗，日常没问题，大流浪期间如何尽可能的规避，让服务稳定
+
+查看connect方法源码   合并静态方法
+npm install hoist-non-react-statics --save 
+
+
+<!-- 使用它写爬虫 -->
+npm install puppeteer --save
+    比较慢：可以考虑
+    // 1.加缓存
+    // 2.lru缓存算法
+
+
+
+prerender（github）
+const prerender = require('prerender')
+const server = prerender()
+server.start()
+
+prerender-spa-plugin(github)
+next.js(github)
+
+
+作业： 使用next.js+antd+redux实现类似 https://e.xitu.io/
+1.查看网页使用的接口（用掘进的接口即可）
+2.左侧掘进，右侧GitHub  trending
+3.支持切花（不用那么多，有功能就行）
